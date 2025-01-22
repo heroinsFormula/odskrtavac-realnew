@@ -12,6 +12,7 @@ export default defineConfig({
     vueJsx(),
     svgLoader()
   ],
+  base: '/odskrtavac-realnew/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
