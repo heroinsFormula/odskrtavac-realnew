@@ -23,11 +23,11 @@
     </div>
     <!-- SIDEBAR HEADER -->
 
-    <div class="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+    <div class="no-scrollbar flex flex-1 flex-col overflow-y-auto duration-300 ease-linear">
       <!-- Sidebar Menu -->
-      <nav>
+      <nav class="flex-1">
         <div>
-          <ul class="mb-6 flex flex-col">
+          <ul class=" flex flex-col">
             <sidebar-item
               icon=""
               label="Celkem přečteno"
@@ -82,33 +82,43 @@
               type="author"
               :authors="booklist.recurring_authors"
             ></sidebar-item>
+            <SidebarItemAuthorError
+              v-if="booklist.recurring_authors.length > 0"
+              :authors="booklist.recurring_authors"
+            />
           </ul>
         </div>
       </nav>
-      <!-- Sidebar Menu -->
+      <SidebarGenerateBooklistButton>
+        Vygenerovat žákovský dokument
+      </SidebarGenerateBooklistButton>
     </div>
   </aside>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useBookStore } from '@/stores/bookStore';
-import SidebarItem from './SidebarItem.vue';
+import { defineComponent } from 'vue'
+import { useBookStore } from '@/stores/bookStore'
+import SidebarItem from './SidebarItem.vue'
+import SidebarItemAuthorError from './SidebarItemAuthorError.vue'
+import SidebarGenerateBooklistButton from './SidebarGenerateBooklistButton.vue'
 
 export default defineComponent({
   name: 'Sidebar',
   components: {
     SidebarItem,
+    SidebarGenerateBooklistButton,
+    SidebarItemAuthorError
   },
   computed: {
     booklist() {
-      const store = useBookStore();
-      return store.booklistAttributes;
+      const store = useBookStore()
+      return store.booklistAttributes
     }
   },
   mounted() {
-    const store = useBookStore();
-    store.getBooklistAttributes();
+    const store = useBookStore()
+    store.getBooklistAttributes()
   }
-});
+})
 </script>

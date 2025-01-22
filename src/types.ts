@@ -26,5 +26,5 @@ export interface BooklistAttributes {
   poetry: number;
   drama: number;
   total: number;
-  recurring_authors: string[]; // should be array of author objects?
+  recurring_authors: string[];
 }

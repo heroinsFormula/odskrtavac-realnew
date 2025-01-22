@@ -5,7 +5,17 @@ import { bookService } from '@/api/bookService';
 export const useBookStore = defineStore('bookStore', {
   state: () => ({
     books: [] as Book[],
-    booklistAttributes: {} as BooklistAttributes,
+    booklistAttributes: {
+      world_and_czech_pre18th_century: 0,
+      world_and_czech_19th_century: 0,
+      world20th_and21st_century: 0,
+      czech20th_and21st_century: 0,
+      prose: 0,
+      poetry: 0,
+      drama: 0,
+      total: 0,
+      recurring_authors: [],
+    } as BooklistAttributes,
   }),
   actions: {
     async getBooks() {
