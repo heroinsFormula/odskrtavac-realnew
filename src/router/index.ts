@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useUserStore } from '@/stores/userStore'
 
-import SigninView from '@/views/Authentication/SigninView.vue'
-import SignupView from '@/views/Authentication/SignupView.vue'
+import LoginView from '@/views/Authentication/LoginView.vue'
+import RegisterView from '@/views/Authentication/RegisterView.vue'
 import CalendarView from '@/views/CalendarView.vue'
 import BasicChartView from '@/views/Charts/BasicChartView.vue'
 import ECommerceView from '@/views/Dashboard/ECommerceView.vue'
@@ -19,7 +20,8 @@ const routes = [
     name: 'eCommerce',
     component: ECommerceView,
     meta: {
-      title: 'eCommerce Dashboard'
+      title: 'eCommerce Dashboard',
+      requiresAuth: true
     }
   },
   {
@@ -97,32 +99,51 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: SigninView,
+    component: LoginView,
     meta: {
-      title: 'Login'
-    }
+      title: 'Přihlásit se',
+      requiresGuest: true, // Mark this route as accessible only to guests
+    },
   },
   {
     path: '/register',
     name: 'register',
-    component: SignupView,
+    component: RegisterView,
     meta: {
-      title: 'Registrovat se'
-    }
-  }
-]
+      title: 'Registrovat se',
+      requiresGuest: true, // Mark this route as accessible only to guests
+    },
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { left: 0, top: 0 }
-  }
-})
+    return savedPosition || { left: 0, top: 0 };
+  },
+});
 
 router.beforeEach((to, from, next) => {
-  document.title = `Vue.js ${to.meta.title} | TailAdmin - Vue.js Tailwind CSS Dashboard Template`
-  next()
-})
+  const userStore = useUserStore();
 
-export default router
+  // Set the document title
+  document.title = `Odškrtávač - ${to.meta.title}`;
+
+  // Check if the route requires authentication
+  if (to.meta.requiresAuth && !userStore.loggedIn) {
+    // Redirect to the login page with the original path as a query parameter
+    next({ name: 'login', query: { redirect: to.fullPath } });
+  }
+  // Check if the route requires the user to be a guest (not logged in)
+  else if (to.meta.requiresGuest && userStore.loggedIn) {
+    // Redirect to the home page or another appropriate route
+    next({ name: 'eCommerce' });
+  }
+  // Allow access to the route
+  else {
+    next();
+  }
+});
+
+export default router;

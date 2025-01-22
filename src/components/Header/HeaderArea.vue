@@ -6,6 +6,7 @@ import DropdownNotification from './DropdownNotification.vue'
 import DropdownUser from './DropdownUser.vue'
 import SearchBar from './SearchBar.vue'
 import LogoutButton from './LogoutButton.vue'
+import { useUserStore } from '@/stores/userStore'
 
 const { toggleSidebar } = useSidebarStore()
 const sidebarStore = useSidebarStore()
@@ -101,7 +102,8 @@ const sidebarStore = useSidebarStore()
           </li>
 
         </ul>
-        <LogoutButton></LogoutButton>
+        <LogoutButton v-if="useUserStore().loggedIn === true"></LogoutButton>
+        <LoginButton v-else-if="useUserStore().loggedIn === false"></LoginButton>
       </div>
     </div>
   </header>

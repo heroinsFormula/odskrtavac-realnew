@@ -1,28 +1,51 @@
 import axios from 'axios';
+import { StatusCodes } from 'http-status-codes';
+
+interface Tokens {
+  refresh: string,
+  access: string
+}
+
+interface AuthResponse {
+  data: Tokens,
+  status: StatusCodes,
+}
 
 export const userService = {
-  loginUser() {
-    const response = axios.post('user-api/login/', {
-      username: username.value,
-      password: password.value
+  async loginUser(username: string, password: string) {
+    const response: AuthResponse = await axios.post('user-api/login/', {
+      username: username,
+      password: password
     }, {
       withCredentials: true
     });
-    axios.defaults.headers.common['Authorization'] = `Bearer ${response.access}`;
-    localStorage.setItem('refreshToken', response.refresh);
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access}`;
+    localStorage.setItem('refreshToken', response.data.refresh);
+    localStorage.setItem('accessToken', response.data.access)
+    console.log(response.status)
+    return response
   },
 
-  logoutUser() {
-    axios.post('user-api/logout/', {}, {withCredentials: true});
+  async logoutUser() {
+    const localRefreshToken = localStorage.getItem("refreshToken")
+    const localAccessToken = localStorage.getItem("accessToken")
+    const response: AuthResponse = await axios.post('user-api/logout/', {'refresh_token': localRefreshToken}, {
+    headers: {
+      Authorization: `Bearer ${localAccessToken}`,
+    },
+      withCredentials: true,
+    });
     axios.defaults.headers.common['Authorization'] = '';
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('accessToken');
+    return response
   },
 
-  registerUser() {
-    const response = axios.post('user-api/register/', {
-      username: username.value,
-      password: password.value
+  async registerUser(username, password) {
+    const response = await axios.post('user-api/register/', {
+      username: username,
+      password: password
     });
+    return response
   }
 }
