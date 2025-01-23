@@ -1,7 +1,6 @@
-import { userService } from '@/api/userService';
-import { StatusCodes } from 'http-status-codes';
-import { defineStore } from 'pinia';
-
+import { userService } from '@/api/userService'
+import { StatusCodes } from 'http-status-codes'
+import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
@@ -15,25 +14,25 @@ export const useUserStore = defineStore('userStore', {
           this.loggedIn = true
         }
         return response
-      } catch(error) {
+      } catch (error) {
         console.error(error)
       }
     },
     async logout() {
       try {
-        const response = await userService.logoutUser();
+        const response = await userService.logoutUser()
         if (response.status === StatusCodes.RESET_CONTENT) {
           this.loggedIn = false
         }
         return response
-      } catch(error) {
+      } catch (error) {
         console.error(error)
       }
     },
     updateLoggedIn() {
-      const refreshToken = localStorage.getItem('refreshToken');
-      this.loggedIn = !!refreshToken && refreshToken !== '';
+      const refreshToken = localStorage.getItem('refreshToken')
+      this.loggedIn = !!refreshToken && refreshToken !== ''
       console.log('updating logged in state: ', this.loggedIn)
     }
-  },
-});
+  }
+})

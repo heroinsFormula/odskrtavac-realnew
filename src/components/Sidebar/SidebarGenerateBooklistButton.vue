@@ -10,65 +10,58 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { useBookStore } from '@/stores/bookStore';
-import Docxtemplater from 'docxtemplater';
-import PizZip from 'pizzip';
-import { saveAs } from 'file-saver';
+import { defineComponent } from 'vue'
+import { useBookStore } from '@/stores/bookStore'
+import Docxtemplater from 'docxtemplater'
+import PizZip from 'pizzip'
+import { saveAs } from 'file-saver'
 
 export default defineComponent({
   name: 'SidebarGenerateBooklistButton',
   setup() {
-    const bookStore = useBookStore();
+    const bookStore = useBookStore()
 
     const generateDocument = async () => {
       try {
-
         const books = [
           { title: 'Catcher in the Rye' },
           { title: 'Of Mice and Men' },
-          { title: 'To Kill a Mockingbird' },
-
-        ];
+          { title: 'To Kill a Mockingbird' }
+        ]
 
         const data = {
           books: books.map((book, index) => ({
             index: index + 1,
-            title: book.title,
-          })),
-        };
+            title: book.title
+          }))
+        }
 
-
-        const response = await fetch('/odskrtavac-realnew/template.docx');
+        const response = await fetch('/odskrtavac-realnew/template.docx')
         console.log(response)
-        const template = await response.arrayBuffer();
+        const template = await response.arrayBuffer()
         console.log(template)
 
-        const zip = new PizZip(template);
+        const zip = new PizZip(template)
         const doc = new Docxtemplater(zip, {
           paragraphLoop: true,
-          linebreaks: true,
-        });
+          linebreaks: true
+        })
 
+        doc.setData(data)
 
-        doc.setData(data);
+        doc.render()
 
+        const blob = doc.getZip().generate({ type: 'blob' })
 
-        doc.render();
-
-
-        const blob = doc.getZip().generate({ type: 'blob' });
-
-
-        saveAs(blob, 'generated-booklist.docx');
+        saveAs(blob, 'generated-booklist.docx')
       } catch (error) {
-        console.error('Error generating document:', error);
+        console.error('Error generating document:', error)
       }
-    };
+    }
 
     return {
-      generateDocument,
-    };
-  },
-});
+      generateDocument
+    }
+  }
+})
 </script>

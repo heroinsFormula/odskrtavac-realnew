@@ -1,5 +1,5 @@
-import colors from 'tailwindcss/colors';
-import defaultTheme from 'tailwindcss/defaultTheme';
+import colors from 'tailwindcss/colors'
+import defaultTheme from 'tailwindcss/defaultTheme'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -23,11 +23,11 @@ export default {
         black: {
           ...colors.black,
           DEFAULT: '#1C2434',
-          2: '#010101',
+          2: '#010101'
         },
         red: {
           ...colors.red,
-          DEFAULT: '#FB5454',
+          DEFAULT: '#FB5454'
         },
         body: '#64748B',
         bodydark: '#AEB7C0',
@@ -40,7 +40,7 @@ export default {
           ...colors.gray,
           DEFAULT: '#EFF4FB',
           2: '#F7F9FC',
-          3: '#FAFAFA',
+          3: '#FAFAFA'
         },
         graydark: '#333A48',
         whiten: '#F1F5F9',
@@ -60,11 +60,11 @@ export default {
           7: '#FF6766',
           8: '#F0950C',
           9: '#E5E7EB',
-          10: '#0FADCF',
+          10: '#0FADCF'
         },
         success: '#219653',
         danger: '#D34053',
-        warning: '#FFA70B',
+        warning: '#FFA70B'
       },
       fontSize: {
         'title-xxl': ['44px', '55px'],

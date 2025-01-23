@@ -77,7 +77,7 @@ Handle your app's state with Pinia for clean, organized code.
 - Basic UI Kit Elements and Files
 - Figma Design Source - Free Sample
 
-___
+---
 
 ### [⬇️ Download Now](https://tailadmin.com/download)
 

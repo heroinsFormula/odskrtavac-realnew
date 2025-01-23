@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 
 const formData = ref({
-  fullName: 'Devid Jhon',
+  fullName: 'Devid Jho',
   phoneNumber: '+990 3343 7865',
   emailAddress: 'devidjond45@gmail.com',
   username: 'devidjhon24',

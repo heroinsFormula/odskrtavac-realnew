@@ -27,7 +27,7 @@
       <!-- Sidebar Menu -->
       <nav class="flex-1">
         <div>
-          <ul class=" flex flex-col">
+          <ul class="flex flex-col">
             <sidebar-item
               icon=""
               label="Celkem přečteno"
@@ -89,9 +89,7 @@
           </ul>
         </div>
       </nav>
-      <SidebarGenerateBooklistButton>
-        Vygenerovat žákovský dokument
-      </SidebarGenerateBooklistButton>
+      <SidebarGenerateBooklistButton> Vygenerovat žákovský dokument </SidebarGenerateBooklistButton>
     </div>
   </aside>
 </template>

@@ -88,7 +88,6 @@ const sidebarStore = useSidebarStore()
             </button>
 
             <SearchBar></SearchBar>
-
           </div>
         </form>
       </div>
@@ -100,10 +99,8 @@ const sidebarStore = useSidebarStore()
             <DarkModeSwitcher />
             <!-- Dark Mode Toggler -->
           </li>
-
         </ul>
-        <LogoutButton v-if="useUserStore().loggedIn === true"></LogoutButton>
-        <LoginButton v-else-if="useUserStore().loggedIn === false"></LoginButton>
+        <LogoutButton v-if="useUserStore().loggedIn === true" />
       </div>
     </div>
   </header>

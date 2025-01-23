@@ -85,16 +85,19 @@ export default defineComponent({
   },
   methods: {
     handleSubmit() {
-      if (this.username === '' || this.password === '') {console.log("fuck"); return}
+      if (this.username === '' || this.password === '') {
+        console.log('fuck')
+        return
+      }
       this.login()
     },
     async login() {
       try {
         const store = useUserStore()
-        const response = await store.login(this.username, this.password);
+        const response = await store.login(this.username, this.password)
         if (response.status === 200) {
           const router = this.$router
-          router.push('/');
+          router.push('/')
         }
       } catch (error) {
         console.error(error)

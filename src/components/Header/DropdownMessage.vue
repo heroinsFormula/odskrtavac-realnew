@@ -59,7 +59,7 @@ const messagesList = ref([
     <router-link
       class="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
       to="#"
-      @click.prevent="(dropdownOpen = !dropdownOpen), (notifying = false)"
+      @click.prevent="((dropdownOpen = !dropdownOpen), (notifying = false))"
     >
       <span
         :class="!notifying && 'hidden'"

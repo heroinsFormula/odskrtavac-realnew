@@ -102,8 +102,8 @@ const routes = [
     component: LoginView,
     meta: {
       title: 'Přihlásit se',
-      requiresGuest: true, // Mark this route as accessible only to guests
-    },
+      requiresGuest: true // Mark this route as accessible only to guests
+    }
   },
   {
     path: '/register',
@@ -111,39 +111,39 @@ const routes = [
     component: RegisterView,
     meta: {
       title: 'Registrovat se',
-      requiresGuest: true, // Mark this route as accessible only to guests
-    },
-  },
-];
+      requiresGuest: true // Mark this route as accessible only to guests
+    }
+  }
+]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
-    return savedPosition || { left: 0, top: 0 };
-  },
-});
+    return savedPosition || { left: 0, top: 0 }
+  }
+})
 
 router.beforeEach((to, from, next) => {
-  const userStore = useUserStore();
+  const userStore = useUserStore()
 
   // Set the document title
-  document.title = `Odškrtávač - ${to.meta.title}`;
+  document.title = `Odškrtávač - ${to.meta.title}`
 
   // Check if the route requires authentication
   if (to.meta.requiresAuth && !userStore.loggedIn) {
     // Redirect to the login page with the original path as a query parameter
-    next({ name: 'login', query: { redirect: to.fullPath } });
+    next({ name: 'login', query: { redirect: to.fullPath } })
   }
   // Check if the route requires the user to be a guest (not logged in)
   else if (to.meta.requiresGuest && userStore.loggedIn) {
     // Redirect to the home page or another appropriate route
-    next({ name: 'eCommerce' });
+    next({ name: 'eCommerce' })
   }
   // Allow access to the route
   else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
+export default router

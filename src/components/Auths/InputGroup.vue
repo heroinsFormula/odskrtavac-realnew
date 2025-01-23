@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/userStore';
+import { useUserStore } from '@/stores/userStore'
 
 const props = defineProps({
   label: String,
   type: String,
   placeholder: String,
-  storeKey: String, // Key in the store to update
-});
+  storeKey: String // Key in the store to update
+})
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 </script>
 
 <template>

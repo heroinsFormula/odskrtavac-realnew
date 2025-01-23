@@ -11,25 +11,25 @@
 </template>
 
 <script lang="ts">
-import { useBookStore } from "@/stores/bookStore";
+import { useBookStore } from '@/stores/bookStore'
 
 export default {
   setup() {
-    const store = useBookStore();
-    const searchQuery = store.searchQuery;
+    const store = useBookStore()
+    const searchQuery = store.searchQuery
 
     const updateSearchQuery = () => {
       try {
-        store.setSearchQuery(store.searchQuery); // Set the query in the store
+        store.setSearchQuery(store.searchQuery) // Set the query in the store
       } catch (error) {
-        console.error('Error during search:', error); // Catch any errors here
+        console.error('Error during search:', error) // Catch any errors here
       }
-    };
+    }
 
     return {
       searchQuery,
-      updateSearchQuery,
-    };
-  },
-};
+      updateSearchQuery
+    }
+  }
+}
 </script>

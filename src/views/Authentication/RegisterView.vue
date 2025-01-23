@@ -74,16 +74,15 @@
 </template>
 
 <script lang="ts">
-import DefaultAuthCard from '@/components/Auths/DefaultAuthCard.vue';
-import InputGroup from '@/components/Auths/InputGroup.vue';
-import DefaultLayout from '@/layouts/DefaultLayout.vue';
-import userIcon from '@/assets/images/icon/icon-user.svg';
-import passwordIcon from '@/assets/images/icon/icon-password.svg';
+import DefaultAuthCard from '@/components/Auths/DefaultAuthCard.vue'
+import InputGroup from '@/components/Auths/InputGroup.vue'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import userIcon from '@/assets/images/icon/icon-user.svg'
+import passwordIcon from '@/assets/images/icon/icon-password.svg'
 
-import { defineComponent, ref } from 'vue';
-import { userService } from '@/api/userService';
-import axios from 'axios';
-
+import { defineComponent, ref } from 'vue'
+import { userService } from '@/api/userService'
+import axios from 'axios'
 
 export default defineComponent({
   components: {
@@ -91,7 +90,7 @@ export default defineComponent({
     InputGroup,
     DefaultLayout,
     userIcon,
-    passwordIcon,
+    passwordIcon
   },
   data() {
     return {
@@ -103,7 +102,10 @@ export default defineComponent({
   },
   methods: {
     handleSubmit() {
-      if (this.username === '' || this.password === '' ) {console.log("fuck"); return}
+      if (this.username === '' || this.password === '') {
+        console.log('fuck')
+        return
+      }
       this.register()
     },
     async register() {
@@ -111,9 +113,9 @@ export default defineComponent({
         userService.registerUser(this.username, this.password)
         const response = await userService.loginUser(this.username, this.password)
         console.log(response)
-        localStorage.setItem('refreshToken', response.data.refresh);
+        localStorage.setItem('refreshToken', response.data.refresh)
         const router = this.$router
-        router.push('/');
+        router.push('/')
       } catch (error) {
         console.error(error)
         this.errorMessage = 'Nepodařilo se registrovat!'

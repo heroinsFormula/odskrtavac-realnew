@@ -40,7 +40,6 @@ axios.interceptors.response.use(
       refresh = true
 
       getAccessToken()
-
     }
     refresh = false
     return Promise.reject(error)
