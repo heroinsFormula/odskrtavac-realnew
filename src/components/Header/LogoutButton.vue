@@ -28,6 +28,7 @@
 import { StatusCodes } from 'http-status-codes'
 import { useUserStore } from '@/stores/userStore'
 import { defineComponent } from 'vue'
+import { useBookStore } from '@/stores/bookStore'
 
 export default defineComponent({
   methods: {
@@ -36,6 +37,7 @@ export default defineComponent({
         const store = useUserStore()
         const response = await store.logout()
         if (response?.status === StatusCodes.RESET_CONTENT) {
+          useBookStore().resetBooklistAttributes()
           const router = this.$router
           router.push('/login')
         }

@@ -1,60 +1,68 @@
-import axios, { AxiosResponse } from 'axios'
-import { Book, BooklistAttributes } from '@/types'
+import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
+import { Author, Book, BooklistAttributes } from '@/types'
 
-export const bookService = {
-  getBooks() {
-    const accessToken = localStorage.getItem('accessToken')
-    const params = new URLSearchParams({
-      // name: filters.value.name,
-      // poetry: filters.value.poetry ? 'true' : '',
-      // prose: filters.value.prose ? 'true' : '',
-      // drama: filters.value.drama ? 'true' : '',
-      // country: filters.value.country,
-      // century: filters.value.century
-    })
+const getAccessToken = (): string => {
+  const token = localStorage.getItem('accessToken')
+  if (!token) {
+    throw new Error('No access token found. Please log in.')
+  }
+  return token
+}
 
-    const response = axios.get('book-api/get-books/', {
-      params,
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-    return response
-  },
+const makeAuthenticatedRequest = async <T>(
+  method: 'get' | 'post',
+  url: string,
+  data?: any
+): Promise<AxiosResponse<T>> => {
+  try {
+    const accessToken = getAccessToken()
+    const config: AxiosRequestConfig = {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    }
 
-  postBook(newBook: Partial<Book>): Promise<AxiosResponse> {
-    // todo: handle optional attributes (literary genre)
-    const accessToken = localStorage.getItem('accessToken')
-    const response = axios.post(`book-api/post-book/`, newBook, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-    return response
-  },
+    if (method === 'get') {
+      return await axios.get<T>(url, config)
+    } else if (method === 'post') {
+      return await axios.post<T>(url, data, config)
+    }
 
-  markBook(slug: string): Promise<AxiosResponse> {
-    const accessToken = localStorage.getItem('accessToken')
-    const response = axios.post(
-      `book-api/mark-read/${slug}/`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      }
-    )
-    return response
-  },
-
-  getBooklistAttributes(): Promise<AxiosResponse<BooklistAttributes>> {
-    const accessToken = localStorage.getItem('accessToken')
-    const response = axios.get('book-api/get-booklist-attributes/', {
-      // todo: rename on backend
-      headers: {
-        Authorization: `Bearer ${accessToken}`
-      }
-    })
-    return response
+    throw new Error(`Unsupported HTTP method: ${method}`)
+  } catch (error) {
+    console.error('Request failed:', error)
   }
 }
+
+export const getBooks = () => {
+  return makeAuthenticatedRequest<Book[]>('get', 'book-api/get-books/')
+}
+
+export const getAuthors = () => {
+  return makeAuthenticatedRequest<Author[]>('get', 'book-api/get-authors/')
+}
+
+export const postBook = (newBook: Partial<Book>) => {
+  return makeAuthenticatedRequest<Book>('post', 'book-api/post-book/', newBook)
+}
+
+export const markBook = (slug: string) => {
+  return makeAuthenticatedRequest<void>('post', `book-api/mark-read/${slug}/`, {})
+}
+
+export const getBooklistAttributes = () => {
+  return makeAuthenticatedRequest<BooklistAttributes>('get', 'book-api/get-booklist-attributes/')
+}
+
+export const getCountries = () => {
+  return makeAuthenticatedRequest<Country[]>('get', 'book-api/get-countries/')
+}
+
+const bookService = {
+  getBooks,
+  getAuthors,
+  postBook,
+  markBook,
+  getBooklistAttributes,
+  getCountries
+}
+
+export default bookService

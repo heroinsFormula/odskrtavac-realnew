@@ -9,10 +9,11 @@ export interface Author {
 export interface Book {
   id: number
   author: Author
+  author_name: string
   title_name: string
   publish_year: number
   country: string
-  literary_type: string
+  literary_type: 'Próza' | 'Poezie' | 'Drama'
   is_read_by_user: boolean
   slug: string
 }
@@ -27,4 +28,9 @@ export interface BooklistAttributes {
   drama: number
   total: number
   recurring_authors: string[]
+}
+
+export interface Country {
+  name: string
+  // country_flag
 }

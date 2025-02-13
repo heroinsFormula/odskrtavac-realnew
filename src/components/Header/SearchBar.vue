@@ -2,8 +2,8 @@
   <div>
     <input
       type="text"
-      v-model="searchQuery"
-      @input="updateSearchQuery"
+      v-model="searchParam"
+      @input="updateSearchParam"
       placeholder="Search..."
       class="w-full xl:w-125 bg-transparent pr-4 pl-9 focus:outline-none"
     />
@@ -11,24 +11,19 @@
 </template>
 
 <script lang="ts">
-import { useBookStore } from '@/stores/bookStore'
+import { useBookSearchStore } from '@/stores/bookSearchStore'
 
 export default {
-  setup() {
-    const store = useBookStore()
-    const searchQuery = store.searchQuery
-
-    const updateSearchQuery = () => {
-      try {
-        store.setSearchQuery(store.searchQuery) // Set the query in the store
-      } catch (error) {
-        console.error('Error during search:', error) // Catch any errors here
-      }
-    }
-
+  data() {
     return {
-      searchQuery,
-      updateSearchQuery
+      searchParam: ''
+    }
+  },
+  methods: {
+    updateSearchParam() {
+      const store = useBookSearchStore()
+      store.searchParam = this.searchParam
+      store.filterBooks()
     }
   }
 }

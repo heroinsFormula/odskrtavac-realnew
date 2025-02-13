@@ -7,6 +7,7 @@ import DropdownUser from './DropdownUser.vue'
 import SearchBar from './SearchBar.vue'
 import LogoutButton from './LogoutButton.vue'
 import { useUserStore } from '@/stores/userStore'
+import CheckboxSearchOption from './CheckboxSearchOption.vue'
 
 const { toggleSidebar } = useSidebarStore()
 const sidebarStore = useSidebarStore()
@@ -14,7 +15,7 @@ const sidebarStore = useSidebarStore()
 
 <template>
   <header
-    class="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
+    class="sticky top-0 z-10 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none"
   >
     <div class="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
       <div class="flex items-center gap-2 sm:gap-4 lg:hidden">
@@ -88,6 +89,17 @@ const sidebarStore = useSidebarStore()
             </button>
 
             <SearchBar></SearchBar>
+            <CheckboxSearchOption :option="'prose'">Próza</CheckboxSearchOption>
+            <CheckboxSearchOption :option="'poetry'">Poezie</CheckboxSearchOption>
+            <CheckboxSearchOption :option="'drama'">Drama</CheckboxSearchOption>
+            <CheckboxSearchOption :option="'isCzech'">České knihy</CheckboxSearchOption>
+            <CheckboxSearchOption :option="'preEighteenthCentury'"
+              >18. století a dřív</CheckboxSearchOption
+            >
+            <CheckboxSearchOption :option="'nineteenthCentury'">19. století</CheckboxSearchOption>
+            <CheckboxSearchOption :option="'postTwentiethCentury'"
+              >20. a 21. století</CheckboxSearchOption
+            >
           </div>
         </form>
       </div>

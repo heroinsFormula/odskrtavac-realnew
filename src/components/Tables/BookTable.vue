@@ -17,13 +17,14 @@
       :class="`grid grid-cols-6 sm:grid-cols-6 items-center`"
       :key="book.id"
     >
-      <book-table-row :book="book" />
+      <BookTableRow :book="book" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { useBookStore } from '@/stores/bookStore'
+import { useBookSearchStore } from '@/stores/bookSearchStore'
 import { Book } from '@/types'
 import { defineComponent } from 'vue'
 import HeaderRow from './HeaderRow.vue'
@@ -36,14 +37,13 @@ export default defineComponent({
   },
   computed: {
     books(): Book[] {
-      const store = useBookStore()
-      return store.books
+      const store = useBookSearchStore()
+      return store.displayedBooks
     }
   },
   mounted() {
-    const store = useBookStore()
-    store.getBooks()
-    console.log(this.books)
+    useBookStore().getBooks()
+    useBookSearchStore().filterBooks()
   }
 })
 </script>

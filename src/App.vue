@@ -2,10 +2,15 @@
 import { onMounted } from 'vue'
 import { RouterView } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
+import { useBookStore } from './stores/bookStore'
 const userStore = useUserStore()
+const bookStore = useBookStore()
 
 onMounted(() => {
-  userStore.updateLoggedIn() // Check if the user is logged in when the app mounts
+  userStore.updateLoggedIn()
+  if (userStore.loggedIn) {
+    bookStore.updateStore()
+  }
 })
 </script>
 

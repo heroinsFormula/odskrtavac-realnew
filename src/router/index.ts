@@ -102,7 +102,7 @@ const routes = [
     component: LoginView,
     meta: {
       title: 'Přihlásit se',
-      requiresGuest: true // Mark this route as accessible only to guests
+      requiresGuest: true
     }
   },
   {
@@ -111,7 +111,7 @@ const routes = [
     component: RegisterView,
     meta: {
       title: 'Registrovat se',
-      requiresGuest: true // Mark this route as accessible only to guests
+      requiresGuest: true
     }
   }
 ]
@@ -127,21 +127,13 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
 
-  // Set the document title
   document.title = `Odškrtávač - ${to.meta.title}`
 
-  // Check if the route requires authentication
   if (to.meta.requiresAuth && !userStore.loggedIn) {
-    // Redirect to the login page with the original path as a query parameter
     next({ name: 'login', query: { redirect: to.fullPath } })
-  }
-  // Check if the route requires the user to be a guest (not logged in)
-  else if (to.meta.requiresGuest && userStore.loggedIn) {
-    // Redirect to the home page or another appropriate route
+  } else if (to.meta.requiresGuest && userStore.loggedIn) {
     next({ name: 'eCommerce' })
-  }
-  // Allow access to the route
-  else {
+  } else {
     next()
   }
 })

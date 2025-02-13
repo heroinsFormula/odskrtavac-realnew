@@ -3,11 +3,11 @@
     <label class="flex items-center text-center cursor-pointer relative">
       <input
         type="checkbox"
-        :checked="is_read_by_user"
-        @change="markBook(slug)"
+        @change="handleChange(option)"
         class="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-blue-600 checked:border-blue-600"
         id="check1"
       />
+      <slot></slot>
       <span
         class="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
       >
@@ -31,30 +31,22 @@
 </template>
 
 <script lang="ts">
-import { useBookStore } from '@/stores/bookStore'
-import bookService from '@/api/bookService'
 import { defineComponent } from 'vue'
+import { useBookSearchStore } from '@/stores/bookSearchStore'
 
 export default defineComponent({
   props: {
-    is_read_by_user: {
-      type: Boolean,
-      required: true
-    },
-    slug: {
+    option: {
       type: String,
       required: true
     }
   },
 
   methods: {
-    async markBook(slug: string) {
-      try {
-        const store = useBookStore()
-        store.markBookAsRead(slug)
-      } catch (error) {
-        console.error('error', error)
-      }
+    handleChange(option) {
+      const store = useBookSearchStore()
+      store[option] = !store[option]
+      store.filterBooks()
     }
   }
 })

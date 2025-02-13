@@ -12,7 +12,7 @@ const changeTextColor = () => {
 <template>
   <div>
     <label class="mb-3 block text-sm font-medium text-black dark:text-white">
-      Select Country
+      Select sdfghjkkjhgfghj
     </label>
     <div class="relative z-20 bg-white dark:bg-form-input">
       <span class="absolute top-1/2 left-4 z-30 -translate-y-1/2">

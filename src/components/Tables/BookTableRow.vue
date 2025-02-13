@@ -17,7 +17,7 @@
     <p class="hidden text-black text-center dark:text-white sm:block">{{ book.literary_type }}</p>
   </div>
   <div class="flex items-center gap-3 p-2.5 xl:p-5">
-    <book-table-checkmark :is_read_by_user="book.is_read_by_user" :slug="book.slug" />
+    <BookTableCheckmark :is_read_by_user="book.is_read_by_user" :slug="book.slug" />
   </div>
 </template>
 

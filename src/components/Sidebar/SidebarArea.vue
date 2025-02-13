@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="absolute left-0 top-0 z-9999 flex h-screen w-3/20 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
+    class="absolute left-0 top-0 z-20 flex h-screen w-3/20 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0"
   >
     <!-- SIDEBAR HEADER -->
     <div class="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
@@ -89,7 +89,7 @@
           </ul>
         </div>
       </nav>
-      <SidebarGenerateBooklistButton> Vygenerovat žákovský dokument </SidebarGenerateBooklistButton>
+      <SidebarButtonGenerate> Vygenerovat žákovský dokument </SidebarButtonGenerate>
     </div>
   </aside>
 </template>
@@ -99,13 +99,13 @@ import { defineComponent } from 'vue'
 import { useBookStore } from '@/stores/bookStore'
 import SidebarItem from './SidebarItem.vue'
 import SidebarItemAuthorError from './SidebarItemAuthorError.vue'
-import SidebarGenerateBooklistButton from './SidebarGenerateBooklistButton.vue'
+import SidebarButtonGenerate from './SidebarButtonGenerate.vue'
 
 export default defineComponent({
   name: 'Sidebar',
   components: {
     SidebarItem,
-    SidebarGenerateBooklistButton,
+    SidebarButtonGenerate,
     SidebarItemAuthorError
   },
   computed: {
