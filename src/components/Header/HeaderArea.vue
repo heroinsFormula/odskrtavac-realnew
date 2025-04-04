@@ -89,7 +89,7 @@ const sidebarStore = useSidebarStore()
             </button>
 
             <SearchBar></SearchBar>
-            <CheckboxSearchOption :option="'prose'">Próza</CheckboxSearchOption>
+            <!-- <CheckboxSearchOption :option="'prose'">Próza</CheckboxSearchOption>
             <CheckboxSearchOption :option="'poetry'">Poezie</CheckboxSearchOption>
             <CheckboxSearchOption :option="'drama'">Drama</CheckboxSearchOption>
             <CheckboxSearchOption :option="'isCzech'">České knihy</CheckboxSearchOption>
@@ -99,7 +99,7 @@ const sidebarStore = useSidebarStore()
             <CheckboxSearchOption :option="'nineteenthCentury'">19. století</CheckboxSearchOption>
             <CheckboxSearchOption :option="'postTwentiethCentury'"
               >20. a 21. století</CheckboxSearchOption
-            >
+            > -->
           </div>
         </form>
       </div>

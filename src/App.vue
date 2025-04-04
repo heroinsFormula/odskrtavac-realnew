@@ -9,11 +9,11 @@ const bookStore = useBookStore()
 onMounted(() => {
   userStore.updateLoggedIn()
   if (userStore.loggedIn) {
+    userStore.updateIsAdmin()
     bookStore.updateStore()
   }
 })
 </script>
-
 <template>
   <RouterView />
 </template>

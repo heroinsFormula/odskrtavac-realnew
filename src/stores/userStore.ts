@@ -4,7 +4,8 @@ import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore('userStore', {
   state: () => ({
-    loggedIn: false
+    loggedIn: false,
+    isAdmin: false
   }),
   actions: {
     async login(username, password) {
@@ -13,6 +14,15 @@ export const useUserStore = defineStore('userStore', {
         if (response.status === 200) {
           this.loggedIn = true
         }
+        return response
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async updateIsAdmin() {
+      try {
+        const response = await userService.isAdmin()
+        this.isAdmin = response.data.is_admin
         return response
       } catch (error) {
         console.error(error)

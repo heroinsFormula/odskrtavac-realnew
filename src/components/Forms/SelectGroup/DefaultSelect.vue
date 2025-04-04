@@ -11,8 +11,17 @@
         :required="required"
         class="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-normal text-black outline-none transition focus:border-primary active:border-primary invalid:text-gray-400 dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary dark:invalid:text-gray-500"
       >
-        <option value="" disabled selected>{{ placeholder }}</option>
-        <option v-for="(value, key) in options" :key="key" :value="value">{{ value }}</option>
+        <option value="" disabled selected class="text-gray-400 dark:text-gray-500">
+          {{ placeholder }}
+        </option>
+        <option
+          v-for="(value, key) in options"
+          :key="key"
+          :value="value"
+          class="text-black dark:text-white"
+        >
+          {{ value }}
+        </option>
       </select>
     </div>
   </div>

@@ -17,16 +17,15 @@
       :class="`grid grid-cols-6 sm:grid-cols-6 items-center`"
       :key="book.id"
     >
-      <BookTableRow :book="book" />
+      <BookTableRow :book="book" :is-admin="isAdmin" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import { defineComponent, computed, onMounted } from 'vue'
 import { useBookStore } from '@/stores/bookStore'
-import { useBookSearchStore } from '@/stores/bookSearchStore'
-import { Book } from '@/types'
-import { defineComponent } from 'vue'
+import { useUserStore } from '@/stores/userStore'
 import HeaderRow from './HeaderRow.vue'
 import BookTableRow from './BookTableRow.vue'
 
@@ -35,15 +34,25 @@ export default defineComponent({
     HeaderRow,
     BookTableRow
   },
-  computed: {
-    books(): Book[] {
-      const store = useBookSearchStore()
-      return store.displayedBooks
+  setup() {
+    const bookStore = useBookStore()
+    const userStore = useUserStore()
+
+    // Make sure isAdmin is always reactive
+    const isAdmin = computed(() => userStore.isAdmin)
+    const books = computed(() => bookStore.books)
+
+    onMounted(async () => {
+      await bookStore.getBooks()
+      await userStore.updateIsAdmin()
+
+      console.log('Admin status:', isAdmin.value)
+    })
+
+    return {
+      books,
+      isAdmin
     }
-  },
-  mounted() {
-    useBookStore().getBooks()
-    useBookSearchStore().filterBooks()
   }
 })
 </script>

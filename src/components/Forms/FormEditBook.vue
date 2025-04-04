@@ -1,13 +1,13 @@
 <template>
   <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <DefaultCard
-      cardTitle="Přidat knihu"
+      cardTitle="Upravit knihu"
       class="w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto"
     >
       <form @submit.prevent="handleSubmit" class="">
         <div class="p-6.5">
           <InputGroup
-            v-model="titleName"
+            v-model="formData.titleName"
             label="Jméno knihy"
             type="text"
             placeholder="Zadejte jméno titul"
@@ -15,7 +15,7 @@
           />
 
           <DefaultSelect
-            v-model="authorName"
+            v-model="formData.authorName"
             :label="'Jméno autora'"
             :placeholder="'Vyberte autora'"
             :options="authorOptions"
@@ -23,7 +23,7 @@
           />
 
           <InputGroup
-            v-model="publishYear"
+            v-model="formData.publishYear"
             label="Rok vydání"
             type="number"
             placeholder="Zadejte rok vydání"
@@ -31,7 +31,7 @@
           />
 
           <DefaultSelect
-            v-model="country"
+            v-model="formData.country"
             :label="'Země původu'"
             :placeholder="'Vyberte zemi'"
             :options="countryOptions"
@@ -39,7 +39,7 @@
           />
 
           <DefaultSelect
-            v-model="literaryType"
+            v-model="formData.literaryType"
             :label="'Literární druh'"
             :placeholder="'Vyberte literární druh'"
             :options="literaryTypeOptions"
@@ -49,9 +49,9 @@
           <div class="mb-6">
             <label class="mb-2.5 block text-black dark:text-white"> Popis knihy </label>
             <textarea
-              v-model="message"
+              v-model="formData.description"
               rows="6"
-              placeholder="Type your message"
+              placeholder="Zadejte popis knihy"
               class="w-full rounded border-[1.5px] text-black border-stroke bg-transparent py-3 px-5 font-normal outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:text-white dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
             ></textarea>
           </div>
@@ -60,7 +60,7 @@
             type="submit"
             class="flex w-full justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
           >
-            Přidat knihu
+            Uložit změny
           </button>
         </div>
       </form>
@@ -69,12 +69,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, reactive, computed, watch } from 'vue'
 import InputGroup from '@/components/Forms/InputGroup.vue'
 import DefaultCard from '@/components/Forms/DefaultCard.vue'
 import DefaultSelect from './SelectGroup/DefaultSelect.vue'
 import { useBookStore } from '@/stores/bookStore.ts'
-import bookService from '@/api/bookService'
 import { Author, Book, Country } from '@/types'
 
 const literaryTypeOptions = {
@@ -89,64 +88,90 @@ export default defineComponent({
     DefaultCard,
     DefaultSelect
   },
-  data() {
-    return {
+  setup() {
+    const store = useBookStore()
+
+    const formData = reactive({
       titleName: '',
       authorName: '',
       publishYear: null as number | null,
       country: '',
       literaryType: '',
-      message: ''
-    }
-  },
-  computed: {
-    literaryTypeOptions() {
-      return literaryTypeOptions
-    },
+      description: ''
+    })
 
-    authorOptions() {
-      const store = useBookStore()
+    // Prefill form when bookSlug changes or form opens
+    const prefillForm = () => {
+      if (store.bookSlug && store.bookEditFormOpen) {
+        const bookToEdit = store.books.find((book) => book.slug === store.bookSlug)
+        if (bookToEdit) {
+          formData.titleName = bookToEdit.title_name
+          formData.authorName = bookToEdit.author.full_name
+          formData.publishYear = bookToEdit.publish_year
+          formData.country = bookToEdit.country
+          formData.literaryType = bookToEdit.literary_type
+          formData.description = bookToEdit.description || ''
+        }
+      }
+    }
+
+    // Watch for changes in bookSlug and form open state
+    watch(
+      () => [store.bookSlug, store.bookEditFormOpen],
+      () => prefillForm(),
+      { immediate: true }
+    )
+
+    const authorOptions = computed(() => {
       return store.authors.map((author: Author) => author.full_name)
-    },
+    })
 
-    countryOptions() {
-      const store = useBookStore()
+    const countryOptions = computed(() => {
       return store.countries.map((country: Country) => country.name)
-    }
-  },
-  methods: {
-    validateData() {
-      if (
-        !this.titleName ||
-        !this.authorName ||
-        !this.publishYear ||
-        !this.country ||
-        !this.literaryType
-      ) {
-        return false
-      }
-      return true
-    },
-    prepareData() {
-      const authorName = this.authorName
-      const bookData: Book = {
-        title_name: this.titleName,
-        author: authorName,
-        publish_year: this.publishYear as number,
-        country: this.country,
-        literary_type: this.literaryType
-      }
-      return bookData
-    },
+    })
 
-    handleSubmit() {
-      if (this.validateData()) {
-        const data = this.prepareData()
-        console.log(data)
-        bookService.postBook(data)
-      } else {
-        return 'problééééém'
+    const validateData = () => {
+      return !!(
+        formData.titleName &&
+        formData.authorName &&
+        formData.publishYear &&
+        formData.country &&
+        formData.literaryType
+      )
+    }
+
+    const handleSubmit = async () => {
+      if (!validateData()) {
+        console.error('Všechna pole jsou povinná')
+        return
       }
+
+      const bookData: Partial<Book> = {
+        title_name: formData.titleName,
+        author: formData.authorName,
+        publish_year: formData.publishYear as number,
+        country: formData.country,
+        literary_type: formData.literaryType,
+        description: formData.description
+      }
+
+      try {
+        if (store.bookSlug) {
+          await store.editBook(bookData)
+          store.bookEditFormOpen = false
+          store.bookSlug = ''
+        }
+      } catch (error) {
+        console.error('Chyba při ukládání:', error)
+      }
+    }
+
+    return {
+      formData,
+      literaryTypeOptions,
+      authorOptions,
+      countryOptions,
+      handleSubmit
     }
   }
 })

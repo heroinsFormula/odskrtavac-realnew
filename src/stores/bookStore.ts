@@ -5,11 +5,11 @@ import { AxiosResponse } from 'axios'
 
 const handleApiCall = async <T>(
   apiCall: () => Promise<AxiosResponse<T>>,
-  updateState: (response: AxiosResponse<T>) => void
+  onSuccess: (response: AxiosResponse<T>) => void
 ) => {
   try {
     const response = await apiCall()
-    updateState(response)
+    onSuccess(response)
   } catch (error) {
     console.error('Error:', error)
   }
@@ -36,7 +36,10 @@ export const useBookStore = defineStore('bookStore', {
       booklistAttributes: { ...initialBooklistAttributes },
       initialBooklistAttributes,
       bookFormOpen: false,
-      searchParam: ''
+      bookEditFormOpen: false,
+      deleteWarnOpen: false,
+      searchParam: '',
+      bookSlug: ''
     }
   },
   actions: {
@@ -47,6 +50,14 @@ export const useBookStore = defineStore('bookStore', {
           this.books = response.data
         }
       )
+    },
+
+    setCurrentBookSlug(slug: string) {
+      this.bookSlug = slug
+    },
+
+    resetBookSlug() {
+      this.bookSlug = ''
     },
 
     getReadBooks() {
@@ -102,6 +113,26 @@ export const useBookStore = defineStore('bookStore', {
         () => bookService.postBook(book),
         () => {
           this.getBooks()
+        }
+      )
+    },
+
+    async editBook(book: Partial<Book>) {
+      await handleApiCall(
+        () => bookService.editBook(this.bookSlug, book),
+        () => {
+          this.getBooks()
+          this.resetBookSlug()
+        }
+      )
+    },
+
+    async deleteBook() {
+      await handleApiCall(
+        () => bookService.deleteBook(this.bookSlug),
+        () => {
+          this.getBooks()
+          this.resetBookSlug()
         }
       )
     },

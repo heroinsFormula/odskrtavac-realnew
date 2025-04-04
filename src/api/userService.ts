@@ -55,5 +55,16 @@ export const userService = {
       password: password
     })
     return response
+  },
+
+  async isAdmin() {
+    const response = await axios.get('user-api/get-user-rights/', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      },
+      withCredentials: true
+    })
+    console.log(response)
+    return response
   }
 }
